@@ -26,7 +26,7 @@ const response = (res, type, result, message = "", code = 200) => {
     message = result.err.message || message;
     code = checkErrorCode(result.err);
   }
-  res.send(code, {
+  return res.status(code).send({
     success: status,
     data,
     message,
@@ -42,7 +42,7 @@ const paginationResponse = (res, type, result, message = "", code = 200) => {
     data = "";
     message = result.err;
   }
-  res.send(code, {
+  return res.status(code).send({
     success: status,
     data,
     meta: result.meta,

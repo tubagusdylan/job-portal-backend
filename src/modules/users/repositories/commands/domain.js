@@ -40,16 +40,16 @@ class User {
     const stdUsername = username.toLowerCase().trim();
     const hashPassword = await generateHash(password);
 
-    const user = await this.query.findOne({ username });
+    const user = await this.query.findOne({ username }, { id: 1 });
     if (user.data) {
-      return wrapper.error(new ConflictError("Username already exist"));
+      return wrapper.error(new ConflictError("Username is already exist"));
     }
 
     const data = {
       id: uuidv4(),
       username: stdUsername,
-      password: hashPassword,
       email: email,
+      hashed_password: hashPassword,
       role_id: 1,
     };
 
@@ -76,9 +76,9 @@ class User {
     const data = {
       id: uuidv4(),
       username: stdUsername,
-      password: hashPassword,
       email: email,
-      role_id: 2,
+      hashed_password: hashPassword,
+      role_id: 1,
     };
 
     const result = await this.command.insertOne(data);
