@@ -1,11 +1,23 @@
 const { Pool } = require("pg");
+const config = require("../../../config/global_config");
 const logger = require("../../utils/logger");
 const connectionPool = new Map();
 
 const init = async (pgConfig) => {
   const poolKey = JSON.stringify(pgConfig);
   if (!connectionPool.has(poolKey)) {
-    const pool = new Pool({ connectionString: pgConfig });
+    let pool;
+    if (config.get("/dbAivenSSL")) {
+      pool = new Pool({
+        connectionString: pgConfig,
+        ssl: {
+          rejectUnauthorized: true,
+          ca: config.get("/dbAivenSSL"),
+        },
+      });
+    } else {
+      pool = new Pool({ connectionString: pgConfig });
+    }
     const result = new Promise((resolve, reject) => {
       pool.connect((err, client) => {
         if (err) {

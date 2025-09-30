@@ -8,7 +8,7 @@ const {
   GatewayTimeoutError,
   ServiceUnavailableError,
   UnauthorizedError,
-} = require("../error");
+} = require("../errors");
 const { ERROR: httpError } = require("../http-status/status_code");
 
 const data = (data) => ({ err: null, data });

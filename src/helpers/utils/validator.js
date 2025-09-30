@@ -1,6 +1,6 @@
 // this file contains all the validation functions that validated by joi
 const wrapper = require("./wrapper");
-const { BadRequestError } = require("../error");
+const { BadRequestError } = require("../errors");
 
 const isValidPayload = (payload, constraint) => {
   const { value, error } = constraint.validate(payload);

@@ -10,7 +10,8 @@ const config = {
     origins: process.env.CORS_ORIGINS,
   },
   postgresqlUrl: process.env.POSTGRESQL_URL || "postgresql://postgres:postgres@localhost:5432/sample",
-  jwt:{
+  dbAivenSSL: process.env.DB_AIVEN_SSL,
+  jwt: {
     accessSign: process.env.ACCESS_SIGN_OPTIONS,
     refreshSign: process.env.REFRESH_SIGN_OPTIONS,
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
@@ -18,9 +19,9 @@ const config = {
   },
   basicAuth: {
     username: process.env.USERNAME_BASIC,
-    password: process.env.PASSWORD_BASIC
-  }
-}
+    password: process.env.PASSWORD_BASIC,
+  },
+};
 
 const store = new confidence.Store(config);
 

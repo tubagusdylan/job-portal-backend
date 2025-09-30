@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const wrapper = require("../helpers/utils/wrapper");
-const config = require("../config/global_config");
+const wrapper = require("../utils/wrapper");
+const config = require("../../config/global_config");
 
 const signOptions = config.get("/jwt/accessSign");
 const refreshOptions = config.get("/jwt/refreshSign");
