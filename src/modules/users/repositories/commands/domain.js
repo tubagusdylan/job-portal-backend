@@ -105,7 +105,7 @@ class User {
 
   async logout(payload) {
     const { token } = payload;
-    const checkedToken = await verifyAccessToken(token);
+    const checkedToken = await verifyRefreshToken(token);
     if (checkedToken.err) {
       logger.log(ctx, checkedToken.err, checkedToken.err.message);
       return wrapper.error(checkedToken.err);
