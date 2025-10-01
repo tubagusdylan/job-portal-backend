@@ -11,6 +11,7 @@ const loginParamType = joi.object({
   password: joi
     .string()
     .required()
+    .min(8)
     .pattern(/[A-Z]/, "uppercase")
     .pattern(/[a-z]/, "lowercase")
     .pattern(/[0-9]/, "number")
@@ -34,6 +35,7 @@ const registerParamType = joi.object({
   password: joi
     .string()
     .required()
+    .min(8)
     .pattern(/[A-Z]/, "uppercase")
     .pattern(/[a-z]/, "lowercase")
     .pattern(/[0-9]/, "number")
@@ -69,6 +71,7 @@ const updateUserParamType = joi.object({
   password: joi
     .string()
     .optional()
+    .min(8)
     .pattern(/[A-Z]/, "uppercase")
     .pattern(/[a-z]/, "lowercase")
     .pattern(/[0-9]/, "number")
