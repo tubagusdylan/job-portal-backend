@@ -24,6 +24,7 @@ const login = async (req, res) => {
     return sendResponse(validatePayload, res);
   }
   const result = await commandHandler.login(validatePayload.data);
+
   res.cookie("refreshToken", result.data.refreshToken, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,

@@ -16,14 +16,14 @@ class User {
 
   async login(payload) {
     const { username, password } = payload;
-    const user = await this.query.findOne({ username }, { id: 0, password: 1 });
+    const user = await this.query.findOne({ username }, { id: 0, hashed_password: 1 });
 
     if (user.err) {
       logger.log(`${ctx}:generateCredential`, user.err, "User not found");
       return wrapper.error(new NotFoundError("Wrong username or password"));
     }
 
-    const passwordMatch = await compareHash(password, user.data.password);
+    const passwordMatch = await compareHash(password, user.data.hashed_password);
     if (!passwordMatch) {
       return wrapper.error(new BadRequestError("Wrong username or password"));
     }
