@@ -16,10 +16,10 @@ const loginParamType = joi.object({
     .pattern(/[0-9]/, "number")
     .pattern(/[!@#$%^&*()_\-+=[\]{};:'",.<>\/?\\|`~]/, "symbol")
     .messages({
-      "string.empty": "Password tidak boleh kosong",
-      "string.min": "Password minimal {#limit} karakter",
-      "string.max": "Password maksimal {#limit} karakter",
-      "string.pattern.name": "Password harus mengandung setidaknya satu {#name}",
+      "string.empty": "Password must be not empty",
+      "string.min": "Password Minimum: {#limit} character",
+      "string.max": "Password Maksimum: {#limit} character",
+      "string.pattern.name": "Password must has 1 {#name}",
     }),
 });
 
@@ -39,10 +39,10 @@ const registerParamType = joi.object({
     .pattern(/[0-9]/, "number")
     .pattern(/[!@#$%^&*()_\-+=[\]{};:'",.<>\/?\\|`~]/, "symbol")
     .messages({
-      "string.empty": "Password tidak boleh kosong",
-      "string.min": "Password minimal {#limit} karakter",
-      "string.max": "Password maksimal {#limit} karakter",
-      "string.pattern.name": "Password harus mengandung setidaknya satu {#name}",
+      "string.empty": "Password must be not empty",
+      "string.min": "Password Minimum: {#limit} character",
+      "string.max": "Password Maksimum: {#limit} character",
+      "string.pattern.name": "Password must has 1 {#name}",
     }),
   email: joi
     .string()
@@ -74,10 +74,10 @@ const updateUserParamType = joi.object({
     .pattern(/[0-9]/, "number")
     .pattern(/[!@#$%^&*()_\-+=[\]{};:'",.<>\/?\\|`~]/, "symbol")
     .messages({
-      "string.empty": "Password tidak boleh kosong",
-      "string.min": "Password minimal {#limit} karakter",
-      "string.max": "Password maksimal {#limit} karakter",
-      "string.pattern.name": "Password harus mengandung setidaknya satu {#name}",
+      "string.empty": "Password must be not empty",
+      "string.min": "Password Minimum: {#limit} character",
+      "string.max": "Password Maksimum: {#limit} character",
+      "string.pattern.name": "Password must has 1 {#name}",
     }),
   email: joi
     .string()
