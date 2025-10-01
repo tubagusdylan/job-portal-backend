@@ -27,7 +27,7 @@ class User {
     if (!passwordMatch) {
       return wrapper.error(new BadRequestError("Wrong username or password"));
     }
-    delete user.data.password;
+    delete user.data.hashed_password;
 
     const token = await generateAccessToken(user.data);
     const refreshToken = await generateRefreshToken({ id: user.data.id });
@@ -64,7 +64,7 @@ class User {
       logger.error(ctx, "register", "Register Failed", result.err);
       return wrapper.error(new InternalServerError("Register Failed"));
     }
-    delete data.password;
+    delete data.hashed_password;
 
     return wrapper.data({ id: data.id });
   }
@@ -98,7 +98,7 @@ class User {
       logger.error(ctx, "register", "Register Failed", result.err);
       return wrapper.error(new InternalServerError("Register Failed"));
     }
-    delete data.password;
+    delete data.hashed_password;
 
     return wrapper.data({ id: data.id });
   }

@@ -21,11 +21,11 @@ const logout = async (payload) => {
 };
 
 const deleteUser = async (payload) => {
-  return domain.deleteUser();
+  return domain.deleteUser(payload);
 };
 
 const refreshToken = async (payload) => {
-  return domain.refreshToken();
+  return domain.refreshToken(payload);
 };
 
 module.exports = {

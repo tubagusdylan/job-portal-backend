@@ -64,7 +64,7 @@ const registerRecruiter = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const payload = { ...req.params, user_online_id: req.userMeta.id };
+  const payload = { id: req.params.id, user_online_id: req.userMeta.id };
   const validatePayload = validator.isValidPayload(payload, commandModel.deleteParamType);
   if (validatePayload.err) {
     return sendResponse(validatePayload, res);
