@@ -45,6 +45,12 @@ class User {
       return wrapper.error(new ConflictError("Username is already exist"));
     }
 
+    const user2 = await this.query.findOne({ email }, { id: 1 });
+
+    if (user2.data) {
+      return wrapper.error(new ConflictError("Email alredy exist"));
+    }
+
     const data = {
       id: uuidv4(),
       username: stdUsername,
@@ -71,6 +77,12 @@ class User {
     const user = await this.query.findOne({ username }, { id: 1 });
     if (user.data) {
       return wrapper.error(new ConflictError("Username already exist"));
+    }
+
+    const user2 = await this.query.findOne({ email }, { id: 1 });
+
+    if (user2.data) {
+      return wrapper.error(new ConflictError("Email alredy exist"));
     }
 
     const data = {
