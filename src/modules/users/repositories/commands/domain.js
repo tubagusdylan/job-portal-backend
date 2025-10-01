@@ -68,7 +68,7 @@ class User {
     const stdUsername = username.toLowerCase().trim();
     const hashPassword = await generateHash(password);
 
-    const user = await this.query.findOne({ username });
+    const user = await this.query.findOne({ username }, { id: 1 });
     if (user.data) {
       return wrapper.error(new ConflictError("Username already exist"));
     }
