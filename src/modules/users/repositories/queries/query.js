@@ -1,6 +1,8 @@
 const collection = "users";
 const errorEmptyMessage = "Data Not Found Please Try Another Input";
 const errorQueryMessage = "Error querying PostgreSQL";
+const logger = require("../../../../helpers/utils/logger");
+const wrapper = require("../../../../helpers/utils/wrapper");
 const ctx = "User-Query";
 
 class Query {
@@ -15,7 +17,7 @@ class Query {
   async findOneById(id) {
     try {
       const query = `
-        SELECT u.id, r.name, u.username, u.email, u.created_at
+        SELECT u.id, r.name AS role, u.username, u.email, u.created_at
         FROM ${collection} u
         LEFT JOIN roles r ON r.id = u.role_id
         WHERE u.id = $1
