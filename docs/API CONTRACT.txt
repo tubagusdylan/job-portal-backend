@@ -3,7 +3,7 @@ A. Tabel workers
   Method: GET
   Endpoint: "/api/v1/workers/:user_id"
   Req.Param: user_id
-  Query: JOIN Table with ALL TABLE that related to workers Table
+  Query: JOIN Table with ALL TABLE that related to workers Table (Reference to ChatGPT for performance: https://chatgpt.com/share/68de21d2-a148-8007-b437-2971a1275732)
   Response: {
     data: {
       id,
