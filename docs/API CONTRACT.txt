@@ -1,0 +1,308 @@
+A. Tabel workers
+ - Get One Worker By User Id: {
+  Method: GET
+  Endpoint: "/api/v1/workers/:user_id"
+  Req.Param: user_id
+  Query: JOIN Table with ALL TABLE that related to workers Table
+  Response: {
+    data: {
+      id,
+      user_id,
+      name,
+      avatar_url,
+      telephone,
+      date_of_birth,
+      gender_name,
+      country_name,
+      marriage_status_name,
+      religion_name,
+      address,
+      profile_summary,
+      current_salary,
+      expected_salary,
+      work_experiences: [{
+        id,
+        company_name,
+        job_title,
+        start_date,
+        end_date,
+        is_current,
+        description,
+        updated_at
+      }],
+      certifications: [{
+        name,
+        issuer,
+        issue_date,
+        expiry_date,
+        credential_id,
+        is_active,
+        updated_at
+      }],
+      worker_skills: [{
+        skill_id,
+        skill_name,
+      }],
+      educations: [{
+        id,
+        institution_name,
+        degree,
+        major,
+        start_date,
+        end_date,
+        is_current,
+        description,
+        updated_at
+      }],
+      languages: [{
+        id, 
+        language_name,
+        proficiency_level_name,
+        is_primary,
+      }],
+      resume: [{
+        id,
+        resume_url,
+        title,
+        is_default
+      }],
+      portfolios: [{
+        id,
+        title,
+        description,
+        link,
+        is_public
+      }]
+    }
+  }
+ }
+
+ - Insert Data Worker {
+  Method: POST
+  Endpoint: "/api/v1/workers"
+  Req.Body: {
+     user_id,
+     name,
+     avatar_url,
+     telephone,
+     date_of_birth,
+     gender_id,
+     nationality_id,
+     region_id,
+     marriage_status_id,
+     address,
+     profile_summary,
+     current_salary,
+     expected_salary
+  }
+  Response: {
+    data: {
+      id
+    }
+  }
+ }
+
+ - Update Data Worker {
+  Method: PUT
+  Endpont: "/api/v1/workers/:id"
+  Req.Body: {
+    id,
+    user_id,
+    name,
+    avatar_url,
+    telephone,
+    date_of_birth,
+    gender_id,
+    nationality_id,
+    region_id,
+    marriage_status_id,
+    address,
+    profile_summary,
+    current_salary,
+    expected_salary,
+    updated_at
+  }
+  Response: {
+    data: {
+      id
+    }
+  }
+ }
+
+1. Tabel work_experiences
+ - Get All Work Experiences By Worker Id
+  Method: GET
+  Endpoint: "/api/v1/workers/:worker_id/work-exp",
+  Req.Params: worker_id,
+  Response : {
+    data: [{
+      id,
+      company_name,
+      job_title,
+      start_date,
+      end_date,
+      is_current,
+      description,
+      updated_at
+    }]
+  }
+
+ - Get One Work Exp By work exp id
+  Method: GET
+  Endpoint: "/api/v1/workers/:worker_id/work-exp/:id",
+  Req.Params: worker_id, id
+  Response: {
+    data: {
+      id,
+      company_name,
+      job_title,
+      start_date,
+      end_date,
+      is_current,
+      description,
+      updated_at
+    }
+  }
+
+ -  Insert One Work Experience By Worker Id
+  Method: POST
+  Endpoint: "/api/v1/workers/:worker_id/work-exp"
+  Req.Params: worker_id,
+  Req.Body: {
+    company_name,
+    job_title,
+    start_date,
+    end_date,
+    is_current,
+    description,
+  }
+  Response: {
+    data: {
+      id
+    }
+  }
+
+ - Update One Work Experience By Worker Experience Id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/worker-exp/:id"
+ Req.Params: worker_id, id
+ Req.Body: {
+    company_name,
+    job_title,
+    start_date,
+    end_date,
+    is_current,
+    description,
+ }
+ Response: {
+  data: {
+    id
+  }
+ }
+
+ - Delete One Work Experience By Worker Experience Id
+ Method: DELETE
+ Endpoint: "/api/v1/workers/:worker_id/worker-exp/:id"
+ Req.Params: worker_id, id
+ Response: {
+  data: "Successfully deleted"
+ }
+
+2. Tabel certifications
+ - Get All certifications By worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/cert"
+ Req.Params: worker_id
+ Respons: {
+  data: [{
+    id,
+    name,
+    issuer,
+    issue_date,
+    expiry_date,
+    credential_id,
+    is_active,
+    updated_at
+  }]
+ }
+
+ -Get One certifications by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/cert/:id"
+ Req.Params: worker_id, id
+ Respons: {
+  data: {
+    id,
+    name,
+    issuer,
+    issue_date,
+    expiry_date,
+    credential_id,
+    is_active,
+    updated_at
+  }
+ }
+
+ -Insert One certifications by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/cert"
+ Req.Params: worker_id
+ Req.Body: {
+    name,
+    issuer,
+    issue_date,
+    expiry_date,
+    credential_id,
+    is_active
+ }
+ Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Update One certifications by worker id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/cert/:id"
+ Req.Params: worker_id, id
+ Req.Body: {
+    id,
+    name,
+    issuer,
+    issue_date,
+    expiry_date,
+    credential_id,
+    is_active,
+    updated_at
+ }
+ Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Delete One certifications by worker id
+ Method: DELETE
+ Endpoint: "/api/v1/workers/:worker_id/cert/:id"
+ Req.Params: worker_id, id
+ Respons: "certifications Successfully deleted"
+
+
+3. Tabel worker_skills
+
+
+3.1 Tabel skills
+4. Tabel educations
+5. Tabel languages
+6. Tabel resumes
+7. Tabel portfolios
+
+
+
+B. Tabel recruiters
+1. Tabel job_posts
+2. Tabel job_post_tags
+2.1 Tabel job_tags
+3. Tabel job_post_questions
+4. Tabel job_post_answer
+5. Tabel job_applications
