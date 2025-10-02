@@ -285,7 +285,9 @@ A. Tabel workers
  Method: DELETE
  Endpoint: "/api/v1/workers/:worker_id/cert/:id"
  Req.Params: worker_id, id
- Respons: "certifications Successfully deleted"
+ Respons: {
+  data: "certifications Successfully deleted"
+ }
 
 
 3. Tabel worker_skills
