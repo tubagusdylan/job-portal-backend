@@ -266,7 +266,6 @@ A. Tabel workers
  Endpoint: "/api/v1/workers/:worker_id/cert/:id"
  Req.Params: worker_id, id
  Req.Body: {
-    id,
     name,
     issuer,
     issue_date,
@@ -286,20 +285,348 @@ A. Tabel workers
  Endpoint: "/api/v1/workers/:worker_id/cert/:id"
  Req.Params: worker_id, id
  Respons: {
-  data: "certifications Successfully deleted"
+  data: "Certifications successfully deleted"
  }
 
 
 3. Tabel worker_skills
+ - Get All skill by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/skills"
+ Query: JOIN table skill_worker with skills
+ Req.Params: worker_id
+ Response: {
+  data: [{
+    skill_name
+  }]
+ }
 
+ - Insert One Skill by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/skills"
+ Req.Params: worker_id
+ Req.Body: {
+  skill_id
+ }
+ Response: {
+  data: {
+    id
+  }
+ }
+
+ - Delete One Skill by worker id and skill id
+ Method: DELETE
+ Endpoint: "/api/v1/workers/:worker_id/skills/:id"
+ Req.Params: worker_id, id
+ Response: {
+  data: "Worker skill successfully deleted"
+ }
 
 3.1 Tabel skills
+ - Get All skills
+ Method: GET
+ Endpoint: "/api/v1/skills?name="
+ Req.Query: name
+ Response: {
+  data: [{
+    id,
+    skill_name
+    created_at
+  }]
+ }
+
+ - Get One Skill
+ Method: GET
+ Endpoint: "/api/v1/skills/:id"
+ Req.Params: id
+ Response: {
+  data: {
+    id,
+    skill_name,
+    created_at
+  }
+ }
+
+ - Insert One Skill
+ Method: POST
+ Endpoint: "/api/v1/skills"
+ Req.Body: {
+  skill_name
+ }
+ Response: {
+  data: {
+    id
+  }
+ }
+
+ - Delete One Skill
+ Method: DELETE
+ Endpoint: "/api/v1/skills/:id"
+ Req.Params: id
+ Response: {
+  data: {
+    id
+  }
+ }
+
 4. Tabel educations
+ - Get All Educations by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/edu"
+ Req.Params: worker_id
+ Response: {
+  data: [{
+    id,
+    institution_name,
+    degree,
+    major,
+    start_date,
+    end_date,
+    is_current,
+    description,
+    updated_at
+  }]
+ }
+
+ - Get One Education by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/edu/:id"
+ Req.Params: worker_id, id
+ Response: {
+    data: [{
+      id,
+      institution_name,
+      degree,
+      major,
+      start_date,
+      end_date,
+      is_current,
+      description,
+      updated_at
+  }]
+ }
+
+ - Insert one Education by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/edu"
+ Req.Params: worker_id
+ Req.Body: {
+    institution_name,
+    degree,
+    major,
+    start_date,
+    end_date,
+    is_current,
+    description,
+    updated_at
+ }
+ Response: {
+  data: {
+    id
+  }
+ }
+
+ - Update one Education by worker id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/edu/:id"
+ Req.Params: worker_id, id
+ Req.Body: {
+    institution_name,
+    degree,
+    major,
+    start_date,
+    end_date,
+    is_current,
+    description,
+    updated_at
+ }
+ Response: {
+  data: {
+    id
+  }
+ }
+
+ - Delete one Education by worker id
+ Method: DELETE
+ Endpoint: "/api/v1/workers/:worker_id/edu/:id"
+ Req.Params: worker_id, id
+ Response: {
+  data: "Education successfully deleted"
+ }
+
 5. Tabel languages
+ - GET ALL languages by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/lang"
+ Req.Params : worker_id
+ Respons: {
+  data: [{
+    id,
+    language_name,
+    proficiency_level_name,
+    proficiency_level_id,
+    is_primary,
+    created_at,
+    updated_at
+  }]
+ }
+
+ -Insert One languange by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/lang"
+ Req.Params : worker_id
+ Req.Body: {
+    language_name,
+    proficiency_level_name,
+    proficiency_level_id,
+    is_primary,
+    created_at,
+    updated_at
+ }
+ Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Update One languange by worker id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/lang/:id"
+ Req.Params: worker_id, id
+ Req.Body: {
+    language_name,
+    proficiency_level_name,
+    proficiency_level_id,
+    is_primary,
+    created_at,
+    updated_at
+ }
+  Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Delete One language by worker id
+ Method: Delete
+ Endpoint: "/api/v1/workers/:worker_id/lang/id"
+ Response: {
+  data: "Education successfully deleted"
+ }
+
 6. Tabel resumes
+ - GET ALL resumes by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/resumes"
+ Req.Params : worker_id
+ Respons: {
+  data: [{
+    id, 
+    resume_url,
+    title,
+    is_default,
+    created_at,
+    updated_at
+  }]
+ }
+
+ -Insert One resume by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/resumes"
+ Req.Params : worker_id
+ Req.Body: {
+    resume_url,
+    title,
+    is_default,
+    created_at,
+    updated_at
+ }
+ Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Update One resume by worker id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/resumes/:id"
+ Req.Params: worker_id, id
+ Req.Body: {
+    resume_url,
+    title,
+    is_default,
+    created_at,
+    updated_at
+ }
+  Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Delete One resume by worker id
+ Method: Delete
+ Endpoint: "/api/v1/workers/:worker_id/resumes/:id"
+ Response: {
+  data: "Resume successfully deleted"
+ }
+
 7. Tabel portfolios
+ - GET ALL portfolios by worker id
+ Method: GET
+ Endpoint: "/api/v1/workers/:worker_id/portfolios"
+ Req.Params : worker_id
+ Respons: {
+  data: [{
+    id, 
+    title,
+    description,
+    link,
+    is_public,
+    updated_at
+  }]
+ }
 
+ -Insert One portfolio by worker id
+ Method: POST
+ Endpoint: "/api/v1/workers/:worker_id/portfolios"
+ Req.Params : worker_id
+ Req.Body: { 
+    title,
+    description,
+    link,
+    is_public,
+    updated_at
+ }
+ Respons: {
+  data: {
+    id
+  }
+ }
 
+ -Update One portfolio by worker id
+ Method: PUT
+ Endpoint: "/api/v1/workers/:worker_id/portfolios/:id"
+ Req.Params: worker_id, id
+ Req.Body: { 
+    title,
+    description,
+    link,
+    is_public,
+    updated_at
+ }
+  Respons: {
+  data: {
+    id
+  }
+ }
+
+ -Delete One portfolio by worker id
+ Method: Delete
+ Endpoint: "/api/v1/workers/:worker_id/portfolios/:id"
+ Response: {
+  data: "Portfolios successfully deleted"
+ }
 
 B. Tabel recruiters
 1. Tabel job_posts
