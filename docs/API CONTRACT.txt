@@ -508,7 +508,7 @@ A. Tabel workers
  }
 
  -Delete One language by worker id
- Method: Delete
+ Method: DELETE
  Endpoint: "/api/v1/workers/:worker_id/lang/id"
  Response: {
   data: "Education successfully deleted"
@@ -565,7 +565,7 @@ A. Tabel workers
  }
 
  -Delete One resume by worker id
- Method: Delete
+ Method: DELETE
  Endpoint: "/api/v1/workers/:worker_id/resumes/:id"
  Response: {
   data: "Resume successfully deleted"
@@ -622,7 +622,7 @@ A. Tabel workers
  }
 
  -Delete One portfolio by worker id
- Method: Delete
+ Method: DELETE
  Endpoint: "/api/v1/workers/:worker_id/portfolios/:id"
  Response: {
   data: "Portfolios successfully deleted"
