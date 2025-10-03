@@ -259,6 +259,26 @@
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
     );
 
+    CREATE TABLE IF NOT EXISTS industries (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    );
+
+    INSERT INTO industries (name) VALUES
+    ('Information Technology'),
+    ('Finance & Banking'),
+    ('Healthcare & Medicine'),
+    ('Education & Training'),
+    ('Manufacturing & Production'),
+    ('E-Commerce & Retail'),
+    ('Transportation & Logistics'),
+    ('Construction & Real Estate'),
+    ('Tourism & Hospitality'),
+    ('Environmental & Energy'),
+    ('Government & Public Sector'),
+    ('Legal & Consulting');
+
 
     CREATE TABLE IF NOT EXISTS recruiters (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -269,13 +289,15 @@
         contact_name VARCHAR(100) NOT NULL,
         contact_phone VARCHAR(30) NOT NULL,
         address TEXT,
-        industry VARCHAR(100),
+        industry_id INTEGER,
         description TEXT,
         created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
         CONSTRAINT fk_recruiter_user
             FOREIGN KEY (user_id) REFERENCES users(id)
-            ON DELETE CASCADE
+            ON DELETE CASCADE,
+        CONSTRAINT fk_recruiter_industry
+            FOREIGN KEY (industry_id) REFERENCES industries(id) ON DELETE SET NULL
     );
 
     CREATE TABLE IF NOT EXISTS skills (
