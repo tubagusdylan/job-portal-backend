@@ -7,9 +7,11 @@
 
     CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        username VARCHAR(50) NOT NULL UNIQUE,
+        username VARCHAR(50) UNIQUE,
         email VARCHAR(255) NOT NULL UNIQUE,
-        hashed_password TEXT NOT NULL,
+        hashed_password TEXT,
+        login_provider VARCHAR(20),
+        provider_id TEXT, 
         role_id INT NOT NULL REFERENCES roles(id) DEFAULT 1,
         created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
