@@ -27,7 +27,8 @@ passport.use(
 );
 
 const authGoogle = (req, res, next) => {
-  passport.authenticate("google", { scope: ["email", "profile"] })(req, res, next);
+  const { role_id } = req.query;
+  passport.authenticate("google", { scope: ["email", "profile"], state: JSON.stringify({ role_id }) })(req, res, next);
 };
 
 const authGoogleCallback = (req, res, next) => {
@@ -35,7 +36,9 @@ const authGoogleCallback = (req, res, next) => {
     if (err || !user) {
       return res.redirect(`${feUrl}/error`);
     }
-    req.user = user;
+    const state = req.query.state ? JSON.parse(req.query.state) : {};
+    const { role_id } = state;
+    req.user = { ...user, role_id };
     next();
   })(req, res, next);
 };

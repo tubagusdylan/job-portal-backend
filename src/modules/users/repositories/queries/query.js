@@ -17,7 +17,7 @@ class Query {
   async findOneById(id) {
     try {
       const query = `
-        SELECT u.id, r.name AS role, u.username, u.email, u.created_at
+        SELECT u.id, r.name AS role, u.username, u.email, u.login_provider, u.provider_id, u.created_at
         FROM ${collection} u
         LEFT JOIN roles r ON r.id = u.role_id
         WHERE u.id = $1

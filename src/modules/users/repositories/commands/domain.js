@@ -37,7 +37,7 @@ class User {
   }
 
   async loginWithGoogle(payload) {
-    const { id, email } = payload;
+    const { id, email, role_id } = payload;
     const user = await this.query.findOne({ email }, { id: 1, email: 1, login_provider: 1, provider_id: 1, role_id: 1 });
     let data;
     if (user.err || !user.data) {
@@ -48,7 +48,7 @@ class User {
         hashed_password: null,
         login_provider: "google",
         provider_id: id,
-        role_id: 1,
+        role_id: role_id || 1,
       };
 
       const result = await this.command.insertOne(data);

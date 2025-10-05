@@ -33,6 +33,7 @@ const loginWithGoogleParamType = joi.object({
     .message("Email format must be true"),
   name: joi.string().optional(),
   picture: joi.string().optional(),
+  role_id: joi.number().required(),
 });
 
 const registerParamType = joi.object({
