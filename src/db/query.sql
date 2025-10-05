@@ -10,7 +10,7 @@
         username VARCHAR(50) UNIQUE,
         email VARCHAR(255) NOT NULL UNIQUE,
         hashed_password TEXT,
-        login_provider VARCHAR(20),
+        login_provider VARCHAR(20) NOT NULL,
         provider_id TEXT, 
         role_id INT NOT NULL REFERENCES roles(id) DEFAULT 1,
         created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),

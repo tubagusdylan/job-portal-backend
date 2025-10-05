@@ -24,6 +24,17 @@ const loginParamType = joi.object({
     }),
 });
 
+const loginWithGoogleParamType = joi.object({
+  id: joi.string().optional(),
+  email: joi
+    .string()
+    .required()
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .message("Email format must be true"),
+  name: joi.string().optional(),
+  picture: joi.string().optional(),
+});
+
 const registerParamType = joi.object({
   username: joi
     .string()
@@ -99,6 +110,7 @@ const logoutParamType = joi.object({
 
 module.exports = {
   loginParamType,
+  loginWithGoogleParamType,
   registerParamType,
   updateUserParamType,
   deleteParamType,

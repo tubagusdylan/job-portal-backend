@@ -5,7 +5,8 @@ const wrapper = require("../../../../helpers/utils/wrapper");
 const logger = require("../../../../helpers/utils/logger");
 const { NotFoundError, ConflictError, InternalServerError, BadRequestError } = require("../../../../helpers/errors");
 const { compareHash, generateHash } = require("../../../../helpers/utils/hash_helper");
-const { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken } = require("../../../../helpers/auth/jwt_helper");
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../../../../helpers/auth/jwt_helper");
+const { result } = require("validate.js");
 const ctx = "User-Command-Domain";
 
 class User {
@@ -16,7 +17,7 @@ class User {
 
   async login(payload) {
     const { username, password } = payload;
-    const user = await this.query.findOne({ username }, { id: 0, hashed_password: 1 });
+    const user = await this.query.findOne({ username }, { id: 1, hashed_password: 1, email: 1, login_provider: 1, provider_id: 1, role_id: 1 });
 
     if (user.err) {
       logger.log(`${ctx}:generateCredential`, user.err, "User not found");
@@ -32,6 +33,36 @@ class User {
     const token = await generateAccessToken(user.data);
     const refreshToken = await generateRefreshToken({ id: user.data.id });
 
+    return wrapper.data({ token, refreshToken });
+  }
+
+  async loginWithGoogle(payload) {
+    const { id, email } = payload;
+    const user = await this.query.findOne({ email }, { id: 1, email: 1, login_provider: 1, provider_id: 1, role_id: 1 });
+    let data;
+    if (user.err || !user.data) {
+      data = {
+        id: uuidv4(),
+        username: null,
+        email,
+        hashed_password: null,
+        login_provider: "google",
+        provider_id: id,
+        role_id: 1,
+      };
+
+      const result = await this.command.insertOne(data);
+      if (result.err) {
+        return wrapper.error(new InternalServerError("Sign up failed"));
+      }
+    } else {
+      data = user.data;
+    }
+
+    const token = await generateAccessToken(data);
+    const refreshToken = await generateRefreshToken({ id: data.id });
+
+    logger.info(ctx, "Success login by google", "Users auth", result.data);
     return wrapper.data({ token, refreshToken });
   }
 
@@ -56,6 +87,8 @@ class User {
       username: stdUsername,
       email: email,
       hashed_password: hashPassword,
+      login_provider: "local",
+      provider_id: null,
       role_id: 1,
     };
 
@@ -90,7 +123,9 @@ class User {
       username: stdUsername,
       email: email,
       hashed_password: hashPassword,
-      role_id: 1,
+      login_provider: "local",
+      provider_id: null,
+      role_id: 2,
     };
 
     const result = await this.command.insertOne(data);
@@ -148,7 +183,7 @@ class User {
       return wrapper.error(new NotFoundError("User Not Found"));
     }
 
-    const accessToken = await generateAccessToken(userData);
+    const accessToken = await generateAccessToken(userData.data);
     return wrapper.data({
       token: accessToken,
     });

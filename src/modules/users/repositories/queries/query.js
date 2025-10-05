@@ -28,7 +28,7 @@ class Query {
       if (!result || result.rows.length === 0) {
         return wrapper.error(errorEmptyMessage);
       }
-      return wrapper.data(result.rows);
+      return wrapper.data(result.rows[0]);
     } catch (error) {
       logger.error(ctx, errorQueryMessage, "findOne", err);
       return wrapper.error(errorQueryMessage);

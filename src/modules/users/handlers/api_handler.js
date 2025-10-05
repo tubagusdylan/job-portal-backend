@@ -4,6 +4,7 @@ const queryHandler = require("../repositories/queries/query_handler");
 const queryModel = require("../repositories/queries/query_model");
 const validator = require("../../../helpers/utils/validator");
 const { sendResponse } = require("../../../helpers/utils/response");
+const { storeCookie, deleteCookie } = require("../../../helpers/auth/cookie_helper");
 
 // query
 const getUserById = async (req, res) => {
@@ -25,10 +26,19 @@ const login = async (req, res) => {
   }
   const result = await commandHandler.login(validatePayload.data);
 
-  res.cookie("refreshToken", result.data.refreshToken, {
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  storeCookie(res, "refreshToken", result.data.refreshToken);
+  return sendResponse(result, res);
+};
+
+const loginWithGoogle = async (req, res) => {
+  const payload = { ...req.user };
+  const validatePayload = validator.isValidPayload(payload, commandModel.loginWithGoogleParamType);
+  if (validatePayload.err) {
+    return sendResponse(validatePayload, res);
+  }
+  const result = await commandHandler.loginWithGoogle(validatePayload.data);
+
+  storeCookie(res, "refreshToken", result.data.refreshToken);
   return sendResponse(result, res);
 };
 
@@ -39,7 +49,7 @@ const logout = async (req, res) => {
     return sendResponse(validatePayload, res);
   }
   const result = await commandHandler.logout(validatePayload.data);
-  res.clearCookie("refreshToken");
+  deleteCookie(res, "refreshToken");
   return sendResponse(result, res);
 };
 
@@ -86,6 +96,7 @@ const refreshToken = async (req, res) => {
 module.exports = {
   getUserById,
   login,
+  loginWithGoogle,
   logout,
   registerRecruiter,
   registerWorker,

@@ -8,6 +8,10 @@ const login = async (payload) => {
   return domain.login(payload);
 };
 
+const loginWithGoogle = async (payload) => {
+  return domain.loginWithGoogle(payload);
+};
+
 const registerWorker = async (payload) => {
   return domain.registerWorker(payload);
 };
@@ -30,6 +34,7 @@ const refreshToken = async (payload) => {
 
 module.exports = {
   login,
+  loginWithGoogle,
   registerWorker,
   registerRecruiter,
   logout,
