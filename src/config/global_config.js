@@ -25,13 +25,11 @@ const config = {
     secretKey: process.env.GOOGLE_SECRET_KEY,
   },
   r2BucketAuth: {
-    accApiToken: process.env.R2_ACCOUNT_API_TOKEN,
-    accS3Client: process.env.ACCESS_S3_CLIENT,
-    secS3Client: process.env.SECRET_S3_CLIENT,
-    enpS3Client: process.env.ENDPOINT_S3_CLIENT,
+    enpS3Client: process.env.R2_ENDPOINT_S3_CLIENT,
     userApiToken: process.env.R2_USER_API_TOKEN,
-    accS3User: process.env.ACCESS_S3_USER,
-    secS3User: process.env.SECRET_S3_USER,
+    accS3User: process.env.R2_ACCESS_S3_USER,
+    secS3User: process.env.R2_SECRET_S3_USER,
+    bucketName: process.env.R2_BUCKET_NAME,
   },
 };
 
