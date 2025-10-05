@@ -1,5 +1,29 @@
 # API Contract
 
+## Tabel Users
+
+### Login or Signup By Google
+
+**Method**: "GET"
+
+**Endpoint**: "/api/v1/users/google?role_id"
+
+**Req.Query**: role_id
+
+**Response**:
+```json
+{
+  "code": 200,
+  "message": "Your request has been processed",
+  "success": true,
+  "data": {
+    "token": string,
+    "refreshToken": string
+  } 
+}
+
+```
+
 ## A. Tabel workers
 
 ### Get One Worker By User Id:
