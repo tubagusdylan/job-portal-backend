@@ -1,18 +1,21 @@
 const { v4: uuidv4 } = require("uuid");
 const Command = require("./command");
+const WorkerCommand = require("../../../workers/repositories/commands/command");
 const Query = require("../queries/query");
+const QueryWorker = require("../../../workers/repositories/queries/query");
 const wrapper = require("../../../../helpers/utils/wrapper");
 const logger = require("../../../../helpers/utils/logger");
 const { NotFoundError, ConflictError, InternalServerError, BadRequestError } = require("../../../../helpers/errors");
 const { compareHash, generateHash } = require("../../../../helpers/utils/hash_helper");
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../../../../helpers/auth/jwt_helper");
-const { result } = require("validate.js");
 const ctx = "User-Command-Domain";
 
 class User {
   constructor(db) {
     this.command = new Command(db);
+    this.workerCommand = new WorkerCommand(db);
     this.query = new Query(db);
+    this.queryWorker = new QueryWorker(db);
   }
 
   async login(payload) {
@@ -37,10 +40,10 @@ class User {
   }
 
   async loginWithGoogle(payload) {
-    const { id, email, role_id } = payload;
+    const { id, email, role_id, name } = payload;
     const user = await this.query.findOne({ email }, { id: 1, email: 1, login_provider: 1, provider_id: 1, role_id: 1 });
     let data;
-    if (user.err || !user.data) {
+    if (user.err) {
       data = {
         id: uuidv4(),
         username: null,
@@ -59,10 +62,24 @@ class User {
       data = user.data;
     }
 
+    const result2 = await this.queryWorker.findOne({ user_id: data.id }, { id: 1 });
+
+    if (role_id === 1 && result2.err) {
+      const dataWorker = {
+        id: uuidv4(),
+        user_id: data.id,
+        name: name,
+      };
+      const resultWorker = await this.workerCommand.insertOne(dataWorker);
+
+      if (resultWorker.err) {
+        return wrapper.error(new InternalServerError("Sign up worker failed"));
+      }
+    }
     const token = await generateAccessToken(data);
     const refreshToken = await generateRefreshToken({ id: data.id });
 
-    logger.info(ctx, "Success login by google", "Users auth", result.data);
+    logger.info(ctx, "Success login by google", "Users auth", "Success");
     return wrapper.data({ token, refreshToken });
   }
 
@@ -92,6 +109,12 @@ class User {
       role_id: 1,
     };
 
+    const dataWorker = {
+      id: uuidv4(),
+      user_id: data.id,
+      name: data.username,
+    };
+
     const result = await this.command.insertOne(data);
     if (result.err) {
       logger.error(ctx, "register", "Register Failed", result.err);
@@ -99,7 +122,13 @@ class User {
     }
     delete data.hashed_password;
 
-    return wrapper.data({ id: data.id });
+    const resultWorker = await this.workerCommand.insertOne(dataWorker);
+    if (resultWorker.err) {
+      logger.error(ctx, "register worker", "Register Worker Failed", result.err);
+      return wrapper.error(new InternalServerError("Register Worker Failed"));
+    }
+
+    return wrapper.data({ user_id: data.id, worker_id: resultWorker.id });
   }
 
   async registerRecruiter(payload) {
