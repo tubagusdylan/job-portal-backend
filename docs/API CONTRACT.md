@@ -2683,6 +2683,7 @@ B. Recruiters Section
         WHERE jp.id = $1
         ORDER BY jt.name ASC;
   
+  
 
 
 
