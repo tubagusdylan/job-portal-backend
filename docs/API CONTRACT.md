@@ -2683,7 +2683,138 @@ B. Recruiters Section
         WHERE jp.id = $1
         ORDER BY jt.name ASC;
   
+  ### Delete tags from job post
   
+  ## Job post questions Table
+  ### Create job post question
+  **Method**: POST
+  **Endpoint**: /api/v1/job-posts/:id/questions
+  **Description**: Creates one or more screening questions for a specific job posting identified by its unique ID. These questions are part of the application process that workers must answer to fulfill application requirements.
+  **Request Parameters**: •	id (required, path parameter): The unique identifier of the job post to which questions will be added. This parameter expects a UUID string format (e.g., a1b2c3d4-5678-9012-3456-789012345678).
+  **Authentication and Authorization**: 
+    •	Authentication: This endpoint requires valid JWT authentication credentials.
+    •	Authorization: The authenticated user must be the recruiter who owns the job post or have administrative privileges.
+  **Request Body Schema**:
+    The endpoint expects a JSON object containing an array of questions to be created:
+    {
+      "questions": [
+        {
+          "question_text": "Which skills do you have?",
+          "question_type_id": 3,
+          "options": ["Java", "Python", "Node.js", "SQL"],
+          "is_required": true,
+          "order_index": 1
+        },
+        {
+          "question_text": "Are you willing to relocate?",
+          "question_type_id": 4,
+          "is_required": true,
+          "order_index": 2
+        },
+        {
+          "question_text": "Rate your proficiency in SQL (1–5)",
+          "question_type_id": 2,
+          "options": {"min": 1, "max": 5},
+          "is_required": true,
+          "order_index": 3
+        },
+        {
+          "question_text": "Describe your experience with agile methodologies",
+          "question_type_id": 1,
+          "is_required": false,
+          "order_index": 4
+        }
+      ]
+    }
+  **Request Body Field Descriptions**:
+    Field	            Type	      Required	      Description	                                                Validation Rules
+    questions	        array	      Yes	            Array of question objects to create	                        Must contain at least 1 question, maximum 20
+    question_text	    string	    Yes	            The text content of the question	                          Length: 1-500 characters
+    question_type_id	integer	    Yes	            Foreign key reference to the question_types lookup table	  Must reference existing question_type_id (1-4)
+    options	          json	      No	            Configuration options for the question (varies by type)	    Must be valid JSON, structure depends on type
+    is_required	      boolean	    No	            Indicates whether the question is mandatory for applicants	Default: true
+    order_index	      integer	    No	            Display order sequence for the question	                    Must be ≥ 0, default: 0
+  **Question Type Reference**: 
+    The question_type_id field references the question_types lookup table with the following predefined values:
+    question_type_id	    Type Name	        Description	                         Options Format Example
+    1	                    TEXT	            Free-form text response	             Not applicable
+    2	                    RATING	          Numerical scale rating	             {"min": 1, "max": 5}
+    3	                    MULTIPLE_CHOICE	  Selection from predefined options	   ["Java", "Python", "Node.js", "SQL"]
+    4	                    BOOLEAN	          Yes/No or true/false answer	         Not applicable
+  **SQL INSERT Statement**: 
+    The endpoint executes the following SQL query to insert job post questions:
+    INSERT INTO job_post_questions (
+    job_post_id, 
+    question_text, 
+    question_type_id, 
+    options, 
+    is_required, 
+    order_index, 
+    created_at, 
+    updated_at
+    )
+    VALUES 
+        ($1, $2, $3, $4, $5, $6, NOW(), NOW()),
+        ($1, $7, $8, $9, $10, $11, NOW(), NOW()),
+        -- Additional question rows as needed
+    RETURNING 
+        id, 
+        question_text, 
+        question_type_id, 
+        options, 
+        is_required, 
+        order_index, 
+        created_at, 
+        updated_at;
+  **Success Response (201 Created)**:
+    {
+      "job_post_id": "a1b2c3d4-5678-9012-3456-789012345678",
+      "questions": [
+                    {
+                      "id": "q001-uuid",
+                      "question_text": "Which skills do you have?",
+                      "question_type_id": 3,
+                      "options": ["Java", "Python", "Node.js", "SQL"],
+                      "is_required": true,
+                      "order_index": 1,
+                      "created_at": "2025-10-06T03:40:00Z",
+                      "updated_at": "2025-10-06T03:40:00Z"
+                    },
+                    {
+                      "id": "q002-uuid",
+                      "question_text": "Are you willing to relocate?",
+                      "question_type_id": 4,
+                      "is_required": true,
+                      "order_index": 2,
+                      "created_at": "2025-10-06T03:40:00Z",
+                      "updated_at": "2025-10-06T03:40:00Z"
+                    },
+                    {
+                      "id": "q003-uuid",
+                      "question_text": "Rate your proficiency in SQL (1–5)",
+                      "question_type_id": 2,
+                      "options": {"min": 1, "max": 5},
+                      "is_required": true,
+                      "order_index": 3,
+                      "created_at": "2025-10-06T03:40:00Z",
+                      "updated_at": "2025-10-06T03:40:00Z"
+                    },
+                    {
+                      "id": "q004-uuid",
+                      "question_text": "Describe your experience with agile methodologies",
+                      "question_type_id": 1,
+                      "is_required": false,
+                      "order_index": 4,
+                      "created_at": "2025-10-06T03:40:00Z",
+                      "updated_at": "2025-10-06T03:40:00Z"
+                    }
+                  ]
+      }
+  
+  
+
+
+
 
 
 
