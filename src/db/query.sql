@@ -420,6 +420,20 @@
     INSERT INTO job_post_statuses (name)
     VALUES ('OPEN'), ('CLOSED'), ('DRAFT');
 
+    CREATE TABLE IF NOT EXISTS salary_types (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL UNIQUE
+    );
+
+    INSERT INTO salary_types (name) VALUES ('daily'), ('weekly'), ('monthly'), ('yearly');
+
+    CREATE TABLE IF NOT EXISTS experience_levels (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL UNIQUE
+    );
+
+    INSERT INTO experience_levels (name) VALUES ('Fresh Graduate'), ('Junior'), ('Middle'), ('Senior');
+
     -- ==========================================
     -- ISO 4217 Currencies Lookup Table
     -- ==========================================
@@ -605,8 +619,10 @@
         description TEXT NOT NULL,
         location VARCHAR(150) NOT NULL,
         employment_type_id INT NOT NULL REFERENCES employment_types(id),
+        experience_level_id INT NOT NULL REFERENCES experience_levels(id),
         salary_min NUMERIC(12,2),
         salary_max NUMERIC(12,2),
+        salary_type_id INT NOT NULL REFERENCES salary_types(id),
         currency_id INT REFERENCES currencies(id),
         published_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         deadline DATE,

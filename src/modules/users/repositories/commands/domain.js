@@ -3,6 +3,7 @@ const Command = require("./command");
 const WorkerCommand = require("../../../workers/repositories/commands/command");
 const Query = require("../queries/query");
 const QueryWorker = require("../../../workers/repositories/queries/query");
+const QueryRecruiter = require("../../../recruiters/repositories/queries/query");
 const wrapper = require("../../../../helpers/utils/wrapper");
 const logger = require("../../../../helpers/utils/logger");
 const { NotFoundError, ConflictError, InternalServerError, BadRequestError } = require("../../../../helpers/errors");
@@ -16,6 +17,7 @@ class User {
     this.workerCommand = new WorkerCommand(db);
     this.query = new Query(db);
     this.queryWorker = new QueryWorker(db);
+    this.queryRecruiter = new QueryRecruiter(db);
   }
 
   async login(payload) {
@@ -34,12 +36,18 @@ class User {
     delete user.data.hashed_password;
 
     if (user.data.role_id === 1) {
-      const result = await this.queryWorker.findOne({ user_id: data.id }, { id: 1 });
+      const result = await this.queryWorker.findOne({ user_id: user.data.id }, { id: 1 });
       if (result.err) {
         return wrapper.error(new NotFoundError("Worker not found"));
       }
       user.data["worker_id"] = result.data.id;
-    } 
+    } else {
+      const result = await this.queryRecruiter.findOne({ user_id: user.data.id }, { id: 1 });
+      if (result.err) {
+        return wrapper.error(new NotFoundError("Recruiter Not Found!"));
+      }
+      user.data["recruiter_id"] = result.data.id;
+    }
 
     const token = await generateAccessToken(user.data);
     const refreshToken = await generateRefreshToken({ id: user.data.id });
