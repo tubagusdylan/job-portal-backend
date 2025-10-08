@@ -26,18 +26,19 @@ const updateOneRecruiter = async (req, res) => {
     return sendResponse(result, res);
 };
 
-// const updateOneRecruiterSelf = async (req, res) => {
-//     const payload = req.userMeta;
-//     const validatePayload = validator.isValidPayload(payload, commandModel.updateRecruiterParamType);
-//     if (validatePayload.err) {
-//         return sendResponse(validatePayload, res);
-//     }
-//     const result = await commandHandler.updateOneRecruiter(validatePayload.data);
-//     return sendResponse(result, res);
-// }
+const updateOneRecruiterSelf = async (req, res) => {
+    const payload = req.userMeta;
+    const validatePayload = validator.isValidPayload(payload, commandModel.updateRecruiterParamType);
+    if (validatePayload.err) {
+        return sendResponse(validatePayload, res);
+    }
+    const result = await commandHandler.updateOneRecruiter(validatePayload.data);
+    return sendResponse(result, res);
+}
 
 module.exports = {
     getRecruiterByUserId,
-    updateOneRecruiter
+    updateOneRecruiter,
+    updateOneRecruiterSelf
 }
 
