@@ -33,6 +33,14 @@ class User {
     }
     delete user.data.hashed_password;
 
+    if (user.data.role_id === 1) {
+      const result = await this.queryWorker.findOne({ user_id: data.id }, { id: 1 });
+      if (result.err) {
+        return wrapper.error(new NotFoundError("Worker not found"));
+      }
+      user.data["worker_id"] = result.data.id;
+    } 
+
     const token = await generateAccessToken(user.data);
     const refreshToken = await generateRefreshToken({ id: user.data.id });
 
@@ -70,12 +78,23 @@ class User {
         user_id: data.id,
         name: name,
       };
+      data["worker_id"] = dataWorker.id;
       const resultWorker = await this.workerCommand.insertOne(dataWorker);
 
       if (resultWorker.err) {
         return wrapper.error(new InternalServerError("Sign up worker failed"));
       }
     }
+
+    if (role_id === 2 && result2.err) {
+      const dataRecruiter = {
+        id: uuidv4(),
+        user_id: data.id,
+        name: name,
+      };
+      data["recruiter_id"] = dataRecruiter.id;
+    }
+
     const token = await generateAccessToken(data);
     const refreshToken = await generateRefreshToken({ id: data.id });
 
@@ -84,7 +103,7 @@ class User {
   }
 
   async registerWorker(payload) {
-    const { username, password, email } = payload;
+    const { username, password, email, name } = payload;
     const stdUsername = username.toLowerCase().trim();
     const hashPassword = await generateHash(password);
 
@@ -112,7 +131,7 @@ class User {
     const dataWorker = {
       id: uuidv4(),
       user_id: data.id,
-      name: data.username,
+      name: name,
     };
 
     const result = await this.command.insertOne(data);
@@ -124,7 +143,7 @@ class User {
 
     const resultWorker = await this.workerCommand.insertOne(dataWorker);
     if (resultWorker.err) {
-      logger.error(ctx, "register worker", "Register Worker Failed", result.err);
+      logger.error(ctx, "register worker", "Register Worker Failed", resultWorker.err);
       return wrapper.error(new InternalServerError("Register Worker Failed"));
     }
 
@@ -132,7 +151,7 @@ class User {
   }
 
   async registerRecruiter(payload) {
-    const { username, password, email } = payload;
+    const { username, password, email, name } = payload;
     const stdUsername = username.toLowerCase().trim();
     const hashPassword = await generateHash(password);
 
@@ -155,6 +174,12 @@ class User {
       login_provider: "local",
       provider_id: null,
       role_id: 2,
+    };
+
+    const dataRecruiter = {
+      id: uuidv4(),
+      user_id: data.id,
+      name: name,
     };
 
     const result = await this.command.insertOne(data);

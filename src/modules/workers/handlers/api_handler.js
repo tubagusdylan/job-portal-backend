@@ -27,4 +27,14 @@ const updateOneWorker = async (req, res) => {
   return sendResponse(result, res);
 };
 
-module.exports = { getWorkerByUserId, updateOneWorker };
+const updateSelfWorker = async (req, res) => {
+  const payload = { ...req.body, id: req.userMeta.worker_id, user_id: req.userMeta.id };
+  const validatePayload = validator.isValidPayload(payload, commandModel.updateWorkerParamType);
+  if (validatePayload.err) {
+    return sendResponse(validatePayload, res);
+  }
+  const result = await commandHandler.updateOneWorker(validatePayload.data);
+  return sendResponse(result, res);
+};
+
+module.exports = { getWorkerByUserId, updateOneWorker, updateSelfWorker };
