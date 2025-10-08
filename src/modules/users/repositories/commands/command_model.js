@@ -63,6 +63,7 @@ const registerParamType = joi.object({
     .required()
     .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     .message("Email format must be true"),
+  name: joi.string().required(),
 });
 
 const deleteParamType = joi.object({

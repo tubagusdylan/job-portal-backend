@@ -20,7 +20,6 @@ class Worker {
     }
 
     const updatableFields = [
-      "user_id",
       "name",
       "avatar_url",
       "telephone",
