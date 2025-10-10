@@ -2286,6 +2286,7 @@ B. Recruiters Section
         title,
         description,
         employment_type_id,
+        salary_type_id,
         location,
         salary_min,
         salary_max,

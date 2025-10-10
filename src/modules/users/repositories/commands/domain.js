@@ -170,7 +170,7 @@ class User {
   }
 
   async registerRecruiter(payload) {
-    const { username, password, email, name } = payload;
+    const { username, password, email, company_name, contact_name, contact_phone } = payload;
     const stdUsername = username.toLowerCase().trim();
     const hashPassword = await generateHash(password);
 
@@ -198,7 +198,9 @@ class User {
     const dataRecruiter = {
       id: uuidv4(),
       user_id: data.id,
-      name: name,
+      company_name,
+      contact_name,
+      contact_phone
     };
 
     const result = await this.command.insertOne(data);
@@ -207,6 +209,12 @@ class User {
       return wrapper.error(new InternalServerError("Register Failed"));
     }
     delete data.hashed_password;
+
+    const resultRecruiter = await this.recruiterCommand.insertOne(dataRecruiter);
+    if (resultRecruiter.err) {
+      logger.error(ctx, "register recruiter", "Register Recruiter Failed", resultRecruiter.err);
+      return wrapper.error(new InternalServerError("Register Recruiter Failed"));
+    }    
 
     return wrapper.data({ id: data.id });
   }
